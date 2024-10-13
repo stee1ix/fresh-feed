@@ -1,0 +1,1 @@
+export const FETCH_FEED_SUCCESS = "FETCH_FEED_SUCCESS";
