@@ -1,14 +1,31 @@
-import { Text } from "react-native";
 import styles from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
-import useDynamicFetch from "../../hooks/useDymanicList";
+import useDynamicList from "../../hooks/useDymanicList";
+import ArticleCard from "../../components/ArticleCard";
+import Animated, { LinearTransition } from "react-native-reanimated";
+import Header from "../../components/Header";
+import EmptyList from "../../components/EmptyList";
 
 const HomeScreen = () => {
-  useDynamicFetch();
+  const {
+    feed = [],
+    pinned = [],
+    feedAllIds = [],
+    error,
+    loading,
+    refresh: onRefresh,
+  } = useDynamicList();
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Fresh Feed</Text>
+      <Header refresh={onRefresh} />
+      <Animated.FlatList
+        data={pinned.concat(feed) ?? feedAllIds.slice(0, 10)}
+        keyExtractor={(item) => item.toString()}
+        renderItem={({ item }) => <ArticleCard id={item} />}
+        itemLayoutAnimation={LinearTransition}
+        ListEmptyComponent={<EmptyList loading={loading} error={error} />}
+      />
     </SafeAreaView>
   );
 };

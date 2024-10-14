@@ -19,7 +19,7 @@ export interface ArticleResponse {
   description: string | null;
   url: string;
   urlToImage: string | null;
-  publishedAt: Date;
+  publishedAt: string;
   content: string;
 }
 

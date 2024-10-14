@@ -1,19 +1,24 @@
 import { Action, FeedState } from "../../types";
-import * as FeedActions from "../../constants/actionTypes";
+import * as Actions from "../../constants/actionTypes";
+import { deleteArticleFromNormalizedFeed } from "../../utils";
+import { FEED_INITIAL_STATE } from "../../constants/state";
 
-const INITIAL_STATE: FeedState = {
-  byId: {},
-  allIds: [],
-};
-
-const feedReducer = (state: FeedState = INITIAL_STATE, action: Action) => {
+const feedReducer = (state: FeedState = FEED_INITIAL_STATE, action: Action) => {
   switch (action.type) {
-    case FeedActions.FETCH_FEED_SUCCESS:
+    case Actions.FETCH_FEED_SUCCESS:
       return {
-        ...state,
         ...action.payload,
       };
-
+    case Actions.DELETE_ARTICLE_REQUEST:
+      const { byId, allIds } = deleteArticleFromNormalizedFeed(
+        action.payload,
+        state.byId,
+        state.allIds
+      );
+      return {
+        byId,
+        allIds,
+      };
     default:
       return state;
   }

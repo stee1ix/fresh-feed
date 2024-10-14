@@ -4,7 +4,9 @@ import HomeScreen from "./src/screens/Home";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect, useState } from "react";
 import { Provider } from "react-redux";
-import store from "./src/redux/store";
+import store, { persistor } from "./src/redux/store";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PersistGate } from "redux-persist/integration/react";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,9 +40,13 @@ export default function App() {
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <StatusBar style="auto" />
-      <Provider store={store}>
-        <HomeScreen />
-      </Provider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <HomeScreen />
+          </PersistGate>
+        </Provider>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }
